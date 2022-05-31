@@ -8,22 +8,17 @@ namespace ContactApp_dotnet
 {
     public class Contact
     {
-        int id;
+        double id;
         string name = "";
         string email = "";
-        int phone;
+        double phone;
         string address = "";
-
-        public void AddContact(List<Object> o, Object c)
-        {
-            o.Add(c);
-        }
 
         public Contact()
         {
 
         }
-        public Contact(int i, string n, string e, int p, string a)
+        public Contact(double i, string n, string e, double p, string a)
         {
             id = i;
             name = n;
@@ -32,19 +27,46 @@ namespace ContactApp_dotnet
             address = a != null ? a : this.address;
         }
 
-        public void SearchByNumber(int num, List<object> list)
+        public void SearchByNumber(double num, List<object> list)
         {
-            //
+            list.ForEach(o =>
+            {
+                Contact c = new Contact();
+                c = (Contact)o;
+                if (c.phone == num)
+                {
+                    Console.WriteLine(c);
+                    return;
+                }
+            });
         }
 
         public void SearchByName(string name, List<object> list)
         {
-            //
+            list.ForEach(o => 
+            {
+                Contact c = new Contact();
+                c = (Contact)o;
+                if (c.name == name)
+                {
+                    Console.WriteLine(c);
+                    return ;
+                }
+            });
         }
 
         public void SearchByEmail(string mail, List<object> list)
         {
-            //
+            list.ForEach(o =>
+            {
+                Contact c = new Contact();
+                c = (Contact)o;
+                if (c.email == mail)
+                {
+                    Console.WriteLine(c);
+                    return;
+                }
+            });
         }
     }
 }
