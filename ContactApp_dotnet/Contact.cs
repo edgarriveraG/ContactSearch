@@ -29,7 +29,18 @@ namespace ContactApp_dotnet
 
         public void AddContactToList(List<object> list, Object contact)
         {
-            list.Add(contact);
+            try
+            {
+                list.Add(contact);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + "\n" + "Intente de nuevo");
+            }
+            finally
+            {
+                Console.WriteLine("Proceso de agregar terminado");
+            }
         }
 
         public void SearchByNumber(double num, List<object> list)
