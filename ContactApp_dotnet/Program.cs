@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +11,17 @@ namespace ContactApp_dotnet
     {
         private static string name = "";
         private static string email = "";
-        private static double number = 0;
+        //private static double number = 0;
         private static string address = "";
         private static double id;
         private static Contact c = new Contact();
         public static List<Object> contacts;
         private static bool band = false;
+        private static double result = 0;
+        private static double option = 0;
+        //private static ITextProcessors textProcessors;
+
+        //Test Contacts
         private static Contact p1 = new Contact(1,"Edgar", "edgar@mail.com",1111234567,"calle 1 #100");
         private static Contact p2 = new Contact(2, "Daniel", "daniel@mail.com", 2221234567, "calle 2 #200");
         private static Contact p3 = new Contact(3, "Dulce", "dulce@mail.com", 3331234567, "calle 3 #300");
@@ -26,6 +32,12 @@ namespace ContactApp_dotnet
         private static Contact p8 = new Contact(8, "Jorge", "jorge@mail.com", 8881234567, "calle 8 #800");
         private static Contact p9 = new Contact(9, "Ana", "ana@mail.com", 9991234567, "calle 9 #900");
         private static Contact p10 = new Contact(10, "Laura", "laura@mail.com", 9993456789, "calle 10 #1000");
+
+        //RegularExpresions
+        
+        private static string regexTel = @"(^[0-9]{10}$)";
+        private static string regexEmail = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+        private static string regexMenu = @"(^[0-5]{1}$)";
 
         public static void Main(string[] args)
         {
@@ -68,11 +80,11 @@ namespace ContactApp_dotnet
 
         public static void Menu()
         {
-            double op = 0;
+            
             Console.WriteLine("¿Desea Buscar a alguien?");
             Console.WriteLine("Seleccione una opción: \n 0.-Salir \n 1.- Agregar Contacto \n 2.- Por número \n 3.- Por nombre \n 4.- Por email \n 5.- Ver Todos");
-            op = StringIsNumber();
-            switch (op)
+            ProcessTextInput();
+            switch (option)
             {
                 case 0: 
                     Console.WriteLine("Salir");
@@ -84,7 +96,8 @@ namespace ContactApp_dotnet
                     return;
                 case 2:
                     Console.WriteLine("Por el número...");
-                    c.SearchByNumber(StringIsNumber(), contacts);
+                    ProcessTextInput();
+                    c.SearchByNumber(result, contacts);
                     return;
                 case 3: 
                     Console.WriteLine("Por nombre de: ");
@@ -92,7 +105,8 @@ namespace ContactApp_dotnet
                     return;
                 case 4: 
                     Console.WriteLine("Por el correo...");
-                    c.SearchByEmail(Console.ReadLine(), contacts);
+                    ProcessTextInput();
+                    c.SearchByEmail(email, contacts);
                     return;
                 case 5:
                     Console.WriteLine("Mostrando toda la información");
@@ -103,48 +117,88 @@ namespace ContactApp_dotnet
             }
         }
 
-        private static double StringIsNumber()
+        private static void ProcessTextInput()
         {
-            string str = Console.ReadLine();
-            double result = 0;
-            if (str.Length == 10)
+            string stringToProcess = Console.ReadLine();
+            Regex regularExpression;
+            if(StringIsNumber(stringToProcess))
             {
-                try
+                if(stringToProcess.Length == 1)
                 {
-                    result = double.Parse(str);
+                    regularExpression = new Regex(regexMenu);
+                    if(regularExpression.IsMatch(stringToProcess))
+                    {
+                        option = result;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Opcion no valida");
+                        ProcessTextInput();
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine(ex.Message);
-                    result = StringIsNumber();
-                }
-                finally
-                {
-                    Console.WriteLine("Procediendo al siguiente paso");
+                    regularExpression= new Regex(regexTel);
+                    if (regularExpression.IsMatch(stringToProcess))
+                    {
+                        Console.WriteLine("Telefono procesado");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Telefono no valido");
+                        ProcessTextInput();
+                    }
                 }
             }
-            else if (str.Length > 1 && (str.Length < 10 || str.Length > 10 ))
+            else
             {
-                Console.WriteLine("Por favor de un número válido");
-                StringIsNumber();
-            }
-            else if (str.Length == 1)
-            {
-                try
+                if(StringIsMail(stringToProcess))
                 {
-                    result = double.Parse(str);
+                    Console.WriteLine("Correo procesado");
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine(ex.Message);
-                    result = StringIsNumber();
-                }
-                finally
-                {
-                    Console.WriteLine("Procediendo al siguiente paso");
+                    Console.WriteLine("Escriba un texto valido");
                 }
             }
-            return result;
+
+        }
+
+        private static bool StringIsNumber(string parameter) 
+        {
+            bool flag = false;
+            try
+            {
+                result = double.Parse(parameter);
+                flag = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                flag = false;
+            }
+            finally
+            {
+                Console.WriteLine("Procediendo a lo siguiente");
+            }
+            return flag;
+
+        }
+
+        private static bool StringIsMail(string textToProcess)
+        {
+            Regex regularExpression = new Regex(regexEmail);
+            
+            if (regularExpression.IsMatch(textToProcess))
+            {
+                email = textToProcess;
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Por favor ponga un correo electrónico");
+                return false;
+            }
         }
 
         private static void AddContact()
@@ -153,13 +207,13 @@ namespace ContactApp_dotnet
             Console.WriteLine("indique su nombre:");
             name = Console.ReadLine();
             Console.WriteLine("indique su correo electronico:");
-            email = Console.ReadLine();
+            ProcessTextInput();
             Console.WriteLine("indique su numero telefonico (solo 10 numeros):");
-            number = StringIsNumber();
+            ProcessTextInput();
             Console.WriteLine("indique su direccion:");
             address = Console.ReadLine();
-            id = new Random().Next(20);
-            Contact p = new Contact(id, name, email, number, address);
+            id = contacts.Count+1;
+            Contact p = new Contact(id, name, email, result, address);
             object o = new object(); //practice of boxing
             o = p;
             c.AddContactToList(contacts, o);
