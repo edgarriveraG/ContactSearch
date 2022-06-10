@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactApp_dotnet", "ContactApp_dotnet\ContactApp_dotnet.csproj", "{0FAD36D8-726E-4E12-A29A-7F038AE7B02E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactApp_dotnet_business", "ContactApp_dotnet_business\ContactApp_dotnet_business.csproj", "{82A931C5-43D0-4500-A15C-041700A97D08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

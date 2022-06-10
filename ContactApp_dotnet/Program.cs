@@ -14,7 +14,7 @@ namespace ContactApp_dotnet
         //private static double number = 0;
         private static string address = "";
         private static double id;
-        private static Contact c = new Contact();
+        private static ContactRepository _contactRepository = new ContactRepository();
         public static List<Object> contacts;
         private static bool band = false;
         private static double result = 0;
@@ -86,31 +86,31 @@ namespace ContactApp_dotnet
             ProcessTextInput();
             switch (option)
             {
-                case 0: 
+                case Enum.Exit: 
                     Console.WriteLine("Salir");
                     band = true;
                     return;
-                case 1:
+                case Enum.AddContact:
                     Console.WriteLine("Agregando a...");
                     AddContact();
                     return;
                 case 2:
                     Console.WriteLine("Por el número...");
                     ProcessTextInput();
-                    c.SearchByNumber(result, contacts);
+                    _contactRepository.SearchByNumber(result, contacts);
                     return;
                 case 3: 
                     Console.WriteLine("Por nombre de: ");
-                    c.SearchByName(Console.ReadLine(), contacts);
+                    _contactRepository.SearchByName(Console.ReadLine(), contacts);
                     return;
                 case 4: 
                     Console.WriteLine("Por el correo...");
                     ProcessTextInput();
-                    c.SearchByEmail(email, contacts);
+                    _contactRepository.SearchByEmail(email, contacts);
                     return;
                 case 5:
                     Console.WriteLine("Mostrando toda la información");
-                    c.ViewAll(contacts);
+                    _contactRepository.ViewAll(contacts);
                     return;
                 default:
                     break;
@@ -216,7 +216,7 @@ namespace ContactApp_dotnet
             Contact p = new Contact(id, name, email, result, address);
             object o = new object(); //practice of boxing
             o = p;
-            c.AddContactToList(contacts, o);
+            _contactRepository.AddContactToList(contacts, o);
         }
     }
 }
