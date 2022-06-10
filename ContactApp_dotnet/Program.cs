@@ -86,11 +86,11 @@ namespace ContactApp_dotnet
             ProcessTextInput();
             switch (option)
             {
-                case Enum.Exit: 
+                case Options.Exit: 
                     Console.WriteLine("Salir");
                     band = true;
                     return;
-                case Enum.AddContact:
+                case Options.AddContact:
                     Console.WriteLine("Agregando a...");
                     AddContact();
                     return;
